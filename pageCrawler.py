@@ -1,7 +1,8 @@
 import logging
 import re
-import requests
 from urllib.parse import urlparse
+
+import requests
 
 
 class WebCrawler:
@@ -10,20 +11,39 @@ class WebCrawler:
     visited_links = []
     logger = None
 
-    def __init__(self, url, prefix = None, max_depth = None, test_external_urls = False, headers=None, verbose=0):
+    def __init__(
+        self,
+        url,
+        prefix=None,
+        max_depth=None,
+        test_external_urls=False,
+        headers=None,
+        verbose=0,
+    ):
+        """WebCrawler class to automatically find broken links and other issues with a website.
+
+        Arguments:
+            url (string): [description]
+            prefix (string, optional): Everything with a different prefix is treated as external.
+                This allows for limiting the crawler to a subdirectory. Defaults to None.
+            max_depth (integer, optional): Maximum crawl depth, None is unlimited. Defaults to None.
+            test_external_urls (bool, optional): Test the status code of external links or not. Defaults to False.
+            headers (dict, optional): Custom headers dictionary for example to provide login details. Defaults to None.
+            verbose (int, optional): How much we output, should be 0,1 or 2. At level 0 only broken links are reported. Defaults to 0.
+        """
         self.logger = logging.getLogger("crawler")
         c_handler = logging.StreamHandler()
         c_handler.setLevel(logging.INFO)
         fmt = logging.Formatter("%(asctime)s - %(message)s")
         c_handler.setFormatter(fmt)
         self.logger.addHandler(c_handler)
-        #use a session
+        # use a session
         self.session = requests.Session()
 
         parsed_url = urlparse(url)
         self.root_url = parsed_url.scheme + "://" + parsed_url.netloc
         self.prefix = prefix
-        if (prefix == None):
+        if prefix == None:
             self.prefix = self.root_url
         self.host = parsed_url.netloc
         self.verbose = verbose
@@ -33,15 +53,15 @@ class WebCrawler:
         if headers:
             self.session.headers.update(headers)
         else:
-            #standard headers for emulating chrome
+            # standard headers for emulating chrome
             headers = {
-            "Accept": "text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.9", 
-            "Accept-Encoding": "gzip, deflate", 
-            "Accept-Language": "en-GB,en-US;q=0.9,en;q=0.8", 
-            "Dnt": "1", 
-            "Host": self.host, 
-            "Upgrade-Insecure-Requests": "1", 
-            "User-Agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_4) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/83.0.4103.97 Safari/537.36", 
+                "Accept": "text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.9",
+                "Accept-Encoding": "gzip, deflate",
+                "Accept-Language": "en-GB,en-US;q=0.9,en;q=0.8",
+                "Dnt": "1",
+                "Host": self.host,
+                "Upgrade-Insecure-Requests": "1",
+                "User-Agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_4) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/83.0.4103.97 Safari/537.36",
             }
             self.session.headers.update(headers)
 
@@ -70,7 +90,7 @@ class WebCrawler:
         if self.verbose == 2:
             self.logger.info(f"{current_link}\t{res.status_code}")
         if self.verbose == 1:
-            print("#", end = '')
+            print("#", end="")
 
         if not res.ok:
             self.logger.error(f"{current_link} returned a {res.status_code}")
@@ -79,7 +99,7 @@ class WebCrawler:
         urls = re.findall(r'href=[\'"]?([^\'" >]+)', res.text)
 
         for link in urls:
-            #remove query part and anchors
+            # remove query part and anchors
             link = self.clean_url(link)
             if not self.is_external(link):
                 if link.startswith("/"):
@@ -101,9 +121,9 @@ class WebCrawler:
         :param url: The url to clean.
         :return: the cleaned url.
         """
-        url = url.split('?')[0] #remove any querystrings
-        return url.split('#')[0] #remove any anchors
-    
+        url = url.split("?")[0]  # remove any querystrings
+        return url.split("#")[0]  # remove any anchors
+
     def is_external(self, url):
         """Check if url is in the part we want to crawl.
 
@@ -114,6 +134,13 @@ class WebCrawler:
             return False
         return True
 
+
 if __name__ == "__main__":
-    crawler = WebCrawler("https://emerald-it.nl/", prefix="https://emerald-it.nl/", max_depth=2, test_external_urls=True, verbose=2)
+    crawler = WebCrawler(
+        "https://emerald-it.nl/",
+        prefix="https://emerald-it.nl/",
+        max_depth=2,
+        test_external_urls=True,
+        verbose=2,
+    )
     crawler.crawl()
