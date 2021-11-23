@@ -10,7 +10,7 @@ class WebCrawler:
     visited_links = []
     logger = None
 
-    def __init__(self, url, max_depth = None, test_external_urls = False, headers=None, verbose=0):
+    def __init__(self, url, prefix = None, max_depth = None, test_external_urls = False, headers=None, verbose=0):
         self.logger = logging.getLogger("crawler")
         c_handler = logging.StreamHandler()
         c_handler.setLevel(logging.INFO)
@@ -22,10 +22,14 @@ class WebCrawler:
 
         parsed_url = urlparse(url)
         self.root_url = parsed_url.scheme + "://" + parsed_url.netloc
+        self.prefix = prefix
+        if (prefix == None):
+            self.prefix = self.root_url
         self.host = parsed_url.netloc
         self.verbose = verbose
         self.max_depth = max_depth
         self.start_url = url
+        self.test_external_urls = test_external_urls
         if headers:
             self.session.headers.update(headers)
         else:
@@ -77,29 +81,39 @@ class WebCrawler:
         for link in urls:
             #remove query part and anchors
             link = self.clean_url(link)
-            if not link.startswith("http"):
+            if not self.is_external(link):
                 if link.startswith("/"):
                     link = self.root_url + link
-                else:
+                elif not link.startswith("http"):
                     link = current_link + link
                 self.crawl(link, depth + 1)
             elif self.test_external_urls:
-                external_res = self.session.get(link)
+                external_res = requests.get(link)
                 if not external_res.ok:
                     self.logger.warning(
                         f"External Page: {link} returned a {external_res.status_code}"
                     )
                     return
 
-    def clean_url(url):
+    def clean_url(self, url):
         """Remove the query and anchors from a url.
 
         :param url: The url to clean.
         :return: the cleaned url.
         """
-        url = url[:url.find('?')] #remove any querystrings
-        return url[:url.find('#')] #remove any anchors
+        url = url.split('?')[0] #remove any querystrings
+        return url.split('#')[0] #remove any anchors
+    
+    def is_external(self, url):
+        """Check if url is in the part we want to crawl.
+
+        :param url: The url to check
+        :return: boolean indicating whether we treat the url as external or not.
+        """
+        if not url.startswith("http") or url.startswith(self.prefix):
+            return False
+        return True
 
 if __name__ == "__main__":
-    crawler = WebCrawler("https://emerald-it.nl/", max_depth=2, test_external_urls=True, verbose=2)
+    crawler = WebCrawler("https://emerald-it.nl/", prefix="https://emerald-it.nl/", max_depth=2, test_external_urls=True, verbose=2)
     crawler.crawl()
