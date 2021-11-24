@@ -2,7 +2,6 @@
 
 A simple crawler to detect broken links in websites.
 
-![Python](https://img.shields.io/pypi/pyversions/webscanner.svg)
 ![Dependencies](https://img.shields.io/badge/dependencies-up%20to%20date-brightgreen.svg)
 ![Contributions welcome](https://img.shields.io/badge/contributions-welcome-orange.svg)
 [![License](https://img.shields.io/badge/license-MIT-blue.svg)](https://opensource.org/licenses/MIT)
@@ -11,7 +10,15 @@ A simple crawler to detect broken links in websites.
 ## How to use
 
 You can use and extend the tool to easily crawl a website and check for broken links and other errors.  
-Download the pageCrawler.py and use it in your own python scripts
+Download the pageCrawler.py and call it from the terminal using:
+
+    python3 pageCrawler.py URL_TO_CRAWL
+
+Check out all the options using
+
+    python3 pageCrawler.py --help
+
+You can also use the class directly in your own python code of course:
 
     crawler = WebCrawler(
         URL_TO_CRAWL,
