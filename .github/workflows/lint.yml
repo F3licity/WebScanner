@@ -32,4 +32,4 @@ jobs:
       - name: Run isort
         uses: olance/isort-action@v1.0.0
         with:
-          args: ./requirements.txt
+          args: .
