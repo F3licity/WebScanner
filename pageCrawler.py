@@ -1,7 +1,9 @@
 import logging
 import re
+import sys
 from urllib.parse import urlparse
 
+import click
 import requests
 
 
@@ -10,6 +12,7 @@ class WebCrawler:
 
     visited_links = []
     logger = None
+    exit_code = 0
 
     def __init__(
         self,
@@ -90,9 +93,10 @@ class WebCrawler:
         if self.verbose == 2:
             self.logger.info(f"{current_link}\t{res.status_code}")
         if self.verbose == 1:
-            print("#", end="")
+            print("#", end="", flush=True)
 
         if not res.ok:
+            self.exit_code += 1
             self.logger.error(f"{current_link} returned a {res.status_code}")
             return
 
@@ -135,12 +139,48 @@ class WebCrawler:
         return True
 
 
-if __name__ == "__main__":
+@click.command()
+@click.argument("url", required=True)
+@click.option(
+    "--prefix",
+    "-p",
+    default=None,
+    help="A prefix to prevent the crawler from accessing top dirs.",
+)
+@click.option(
+    "--max_depth",
+    "-d",
+    default=None,
+    type=int,
+    help="The maximum recursive depth to crawl.",
+)
+@click.option(
+    "--test_external_urls",
+    "-e",
+    default=False,
+    type=bool,
+    help="Whether to test external urls or not.",
+)
+@click.option(
+    "--verbose",
+    "-v",
+    default=0,
+    type=int,
+    help="Either 0,1 or 2. Controls how much output is generated.",
+)
+def cli(url, prefix, max_depth, test_external_urls, verbose):
     crawler = WebCrawler(
-        "https://emerald-it.nl/",
-        prefix="https://emerald-it.nl/",
-        max_depth=2,
-        test_external_urls=True,
-        verbose=2,
+        url,
+        prefix=prefix,
+        max_depth=max_depth,
+        test_external_urls=test_external_urls,
+        verbose=verbose,
     )
     crawler.crawl()
+    # give the exit code (handy for pipeline checks etc.)
+    # the exit_code is the number of broken links found
+    sys.exit(crawler.exit_code)
+
+
+if __name__ == "__main__":
+    cli()
