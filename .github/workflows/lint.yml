@@ -23,13 +23,12 @@ jobs:
           python-version: 3.8
 
       - name: Install Python dependencies
-        run: pip install black flake8
+        run: pip install black
 
-      - name: Run Black
+      - name: Run Linters
         uses: wearerequired/lint-action@v1
         with:
           black: true
-      - name: Run isort
-        uses: jamescurtin/isort-action@master
+      - uses: jamescurtin/isort-action@master
         with:
           requirementsFiles: "requirements.txt"
