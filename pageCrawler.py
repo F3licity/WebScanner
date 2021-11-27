@@ -36,6 +36,7 @@ class WebCrawler:
         """
         self.logger = logging.getLogger("crawler")
         c_handler = logging.StreamHandler()
+        self.logger.setLevel(logging.INFO)
         c_handler.setLevel(logging.INFO)
         fmt = logging.Formatter("%(asctime)s - %(message)s")
         c_handler.setFormatter(fmt)
