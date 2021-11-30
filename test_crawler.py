@@ -14,12 +14,12 @@ class test_crawler(unittest.TestCase):
         assert newurl == "https://google.com/"
 
     def test_is_external(self):
-        crawler = WebCrawler("https://google.com/")
+        crawler = WebScanner("https://google.com/")
         assert crawler.is_external("https://external.com/")
         assert not crawler.is_external("https://google.com/bla")
 
     def test_end_to_end(self):
-        crawler = WebCrawler(
+        crawler = WebScanner(
             "https://emerald-it.nl/",
             max_depth=1,
             test_external_urls=False,
