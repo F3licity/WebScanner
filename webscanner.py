@@ -79,7 +79,7 @@ class WebScanner:
         Args:
             current_link (string, optional): The current link to download and crawl (if not visited yet). Defaults to None.
             depth (int, optional): The current recursive depth. Defaults to 0.
-        """        
+        """
         if current_link == None:
             current_link = self.start_url
         if depth > self.max_depth:
@@ -127,7 +127,7 @@ class WebScanner:
 
         Returns:
             string: url without anchors and query parameters.
-        """        
+        """
         url = url.split("?")[0]  # remove any querystrings
         return url.split("#")[0]  # remove any anchors
 
@@ -139,7 +139,7 @@ class WebScanner:
 
         Returns:
             bool: boolean indicating whether we treat the url as external or not.
-        """ 
+        """
         if not url.startswith("http") or url.startswith(self.prefix):
             return False
         return True
