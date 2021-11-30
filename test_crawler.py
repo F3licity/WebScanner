@@ -1,11 +1,11 @@
 import unittest
 
-from pageCrawler import WebCrawler
+from webscanner import WebScanner
 
 
 class test_crawler(unittest.TestCase):
     def test_clean_url(self):
-        crawler = WebCrawler("https://google.com/")
+        crawler = WebScanner("https://google.com/")
         newurl = crawler.clean_url("https://google.com/#everythingHereShouldBe#Removed")
         assert newurl == "https://google.com/"
         newurl = crawler.clean_url(
