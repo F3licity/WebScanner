@@ -35,6 +35,7 @@ class WebScanner:
     ):
         self.logger = logging.getLogger("crawler")
         c_handler = logging.StreamHandler()
+        self.logger.setLevel(logging.INFO)
         c_handler.setLevel(logging.INFO)
         fmt = logging.Formatter("%(asctime)s - %(message)s")
         c_handler.setFormatter(fmt)
@@ -82,7 +83,7 @@ class WebScanner:
         """
         if current_link == None:
             current_link = self.start_url
-        if depth > self.max_depth:
+        if self.max_depth != None and depth > self.max_depth:
             return
         if current_link in self.visited_links:
             return
