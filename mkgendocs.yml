@@ -1,0 +1,10 @@
+sources_dir: docs
+templates_dir: docs/templates
+repo: https://github.com/F3licity/WebScanner
+version: main
+
+pages:
+  - page: "API.md"
+    source: "webscanner.py"
+    classes: 
+      - WebScanner

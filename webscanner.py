@@ -7,8 +7,18 @@ import click
 import requests
 
 
-class WebCrawler:
-    """Crawl through a website and return broken links."""
+class WebScanner:
+    """WebCrawler class to automatically find broken links and other issues with a website.
+
+    Args:
+        url (string): The url to start crawling.
+        prefix (string, optional): Everything with a different prefix is treated as external.
+            This allows for limiting the crawler to a subdirectory. Defaults to None.
+        max_depth (integer, optional): Maximum crawl depth, None is unlimited. Defaults to None.
+        test_external_urls (bool, optional): Test the status code of external links or not. Defaults to False.
+        headers (dict, optional): Custom headers dictionary for example to provide login details. Defaults to None.
+        verbose (int, optional): How much we output, should be 0,1 or 2. At level 0 only broken links are reported. Defaults to 0.
+    """
 
     visited_links = []
     logger = None
@@ -23,17 +33,6 @@ class WebCrawler:
         headers=None,
         verbose=0,
     ):
-        """WebCrawler class to automatically find broken links and other issues with a website.
-
-        Arguments:
-            url (string): [description]
-            prefix (string, optional): Everything with a different prefix is treated as external.
-                This allows for limiting the crawler to a subdirectory. Defaults to None.
-            max_depth (integer, optional): Maximum crawl depth, None is unlimited. Defaults to None.
-            test_external_urls (bool, optional): Test the status code of external links or not. Defaults to False.
-            headers (dict, optional): Custom headers dictionary for example to provide login details. Defaults to None.
-            verbose (int, optional): How much we output, should be 0,1 or 2. At level 0 only broken links are reported. Defaults to 0.
-        """
         self.logger = logging.getLogger("crawler")
         c_handler = logging.StreamHandler()
         self.logger.setLevel(logging.INFO)
@@ -78,8 +77,9 @@ class WebCrawler:
 
         For every link visited go deeper and deeper to visit all links found in it.
 
-        :param current_link: Check whether the current link is already visited or not.
-        :return: When done, exit the execution. Do not return anything.
+        Args:
+            current_link (string, optional): The current link to download and crawl (if not visited yet). Defaults to None.
+            depth (int, optional): The current recursive depth. Defaults to 0.
         """
         if current_link == None:
             current_link = self.start_url
@@ -123,8 +123,11 @@ class WebCrawler:
     def clean_url(self, url):
         """Remove the query and anchors from a url.
 
-        :param url: The url to clean.
-        :return: the cleaned url.
+        Args:
+            url (string): Url to clean.
+
+        Returns:
+            string: url without anchors and query parameters.
         """
         url = url.split("?")[0]  # remove any querystrings
         return url.split("#")[0]  # remove any anchors
@@ -132,8 +135,11 @@ class WebCrawler:
     def is_external(self, url):
         """Check if url is in the part we want to crawl.
 
-        :param url: The url to check
-        :return: boolean indicating whether we treat the url as external or not.
+        Args:
+            url (string): The url to check.
+
+        Returns:
+            bool: boolean indicating whether we treat the url as external or not.
         """
         if not url.startswith("http") or url.startswith(self.prefix):
             return False
@@ -170,7 +176,7 @@ class WebCrawler:
     help="Either 0,1 or 2. Controls how much output is generated.",
 )
 def cli(url, prefix, max_depth, test_external_urls, verbose):
-    crawler = WebCrawler(
+    crawler = WebScanner(
         url,
         prefix=prefix,
         max_depth=max_depth,
