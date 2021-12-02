@@ -89,7 +89,7 @@ Build the documentation:
 
     gendocs --config mkgendocs.yml
 
-You can then do `mkdocs serve` and acess it on http://127.0.0.1:8000/
+You can then do `mkdocs serve` and access it on http://127.0.0.1:8000/
 
 
 ![](https://img.shields.io/badge/dependencies-up%20to%20date-brightgreen.svg)
