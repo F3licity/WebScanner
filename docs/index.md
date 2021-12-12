@@ -14,6 +14,10 @@ Check out all the options using
     python3 pageCrawler.py --help
 
 ### Run using Docker
+Use the one-liner below to immediately use the webscanner from DockerHub:
+
+    docker run --rm emeraldit/webscanner:1.0.0 URL_TO_CRAWL
+
 You can also easily run the script using Docker.  
 Build the image: `docker build --tag  webscanner:1.0.0 .`
 
@@ -33,7 +37,6 @@ or on powershell:
 
 ### Use in your own project
 You can also use the class directly in your own python code:
-
 ``` py linenums="1"
 from webscanner import WebScanner
 
@@ -59,7 +62,7 @@ follow the initial page are crawled.
 --------------
 1. Clone this repository
     ```bash
-   git@github.com:F3licity/WebScanner.git
+    git@github.com:F3licity/WebScanner.git
     ```
 2. Start a new virtual environment on the root folder of this project, using Python 3.8, and activate it.
    ```bash
@@ -72,12 +75,15 @@ follow the initial page are crawled.
    ```bash
    pip install -r requirements.txt
    ```
-   
+Make sure to check out the CONTRIBUTING.md about the house rules.
 Start developing!
 
 ### Documentation
 To contribute please also update the documentation.
 You can download the required packages from docs-requirements.txt (`pip install -r docs-requirements.txt`).
+
+Install the documentation requirements:
+   ```pip install -r docs-requirements.txt```
 
 Build the documentation:
 

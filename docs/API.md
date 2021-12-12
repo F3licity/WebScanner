@@ -2,7 +2,7 @@
 
 
 ## WebScanner
-[source](https://github.com/F3licity/WebScanner\blob\main\webscanner.py\#L10)
+[source](https://github.com/F3licity/WebScanner/blob/main/webscanner.py/#L10)
 ```python 
 WebScanner(
    url, prefix = None, max_depth = None, test_external_urls = False, headers = None,
@@ -31,7 +31,7 @@ WebCrawler class to automatically find broken links and other issues with a webs
 
 
 ### .crawl
-[source](https://github.com/F3licity/WebScanner\blob\main\webscanner.py\#L70)
+[source](https://github.com/F3licity/WebScanner/blob/main/webscanner.py/#L71)
 ```python
 .crawl(
    current_link = None, depth = 0
@@ -55,7 +55,7 @@ For every link visited go deeper and deeper to visit all links found in it.
 
 
 ### .clean_url
-[source](https://github.com/F3licity/WebScanner\blob\main\webscanner.py\#L122)
+[source](https://github.com/F3licity/WebScanner/blob/main/webscanner.py/#L123)
 ```python
 .clean_url(
    url
@@ -77,7 +77,7 @@ Remove the query and anchors from a url.
 
 
 ### .is_external
-[source](https://github.com/F3licity/WebScanner\blob\main\webscanner.py\#L134)
+[source](https://github.com/F3licity/WebScanner/blob/main/webscanner.py/#L135)
 ```python
 .is_external(
    url
