@@ -8,3 +8,5 @@ requests==2.26.0
 black
 isort
 pytest
+slack
+slack_sdk
