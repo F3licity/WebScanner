@@ -6,6 +6,8 @@ from urllib.parse import urlparse
 import click
 import requests
 
+from slackHandler import SlackHandler
+
 
 class WebScanner:
     """WebCrawler class to automatically find broken links and other issues with a website.
@@ -18,6 +20,7 @@ class WebScanner:
         test_external_urls (bool, optional): Test the status code of external links or not. Defaults to False.
         headers (dict, optional): Custom headers dictionary for example to provide login details. Defaults to None.
         verbose (int, optional): How much we output, should be 0,1 or 2. At level 0 only broken links are reported. Defaults to 0.
+        channel_id TODO
     """
 
     visited_links = []
@@ -32,6 +35,7 @@ class WebScanner:
         test_external_urls=False,
         headers=None,
         verbose=0,
+        channel_id=None,
     ):
         self.logger = logging.getLogger("crawler")
         c_handler = logging.StreamHandler()
@@ -50,6 +54,7 @@ class WebScanner:
             self.prefix = self.root_url
         self.host = parsed_url.netloc
         self.verbose = verbose
+        self.channel_id = channel_id
         self.max_depth = max_depth
         self.start_url = url
         self.test_external_urls = test_external_urls
@@ -129,7 +134,7 @@ class WebScanner:
         Returns:
             string: url without anchors and query parameters.
         """
-        url = url.split("?")[0]  # remove any querystrings
+        url = url.split("?")[0]  # remove any query character
         return url.split("#")[0]  # remove any anchors
 
     def is_external(self, url):
@@ -175,17 +180,34 @@ class WebScanner:
     type=int,
     help="Either 0,1 or 2. Controls how much output is generated.",
 )
-def cli(url, prefix, max_depth, test_external_urls, verbose):
+@click.option(
+    "--channel_id",
+    "-cid",
+    default=None,
+    type=str,
+    help="That is the id of the Slack Channel where the message should be posted.",
+)
+def cli(url, prefix, max_depth, test_external_urls, verbose, channel_id):
     crawler = WebScanner(
         url,
         prefix=prefix,
         max_depth=max_depth,
         test_external_urls=test_external_urls,
         verbose=verbose,
+        channel_id=channel_id,
     )
     crawler.crawl()
     # give the exit code (handy for pipeline checks etc.)
     # the exit_code is the number of broken links found
+    print("\u001b[31m %d \u001b[0m" % crawler.exit_code)
+    if channel_id:
+        sh = SlackHandler(channel_id)
+        if crawler.exit_code > 0:
+            sh.send_message(
+                f"There are {crawler.exit_code} broken links on {crawler.start_url}"
+            )
+        else:
+            sh.send_message(f"All the links on {crawler.start_url} returned a 200")
     sys.exit(crawler.exit_code)
 
 
