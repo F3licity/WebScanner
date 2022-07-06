@@ -20,7 +20,7 @@ class WebScanner:
         test_external_urls (bool, optional): Test the status code of external links or not. Defaults to False.
         headers (dict, optional): Custom headers dictionary for example to provide login details. Defaults to None.
         verbose (int, optional): How much we output, should be 0,1 or 2. At level 0 only broken links are reported. Defaults to 0.
-        channel_id TODO
+        channel_id (string, optional): The ID of the Slack channel the message should be posted in
     """
 
     visited_links = []
