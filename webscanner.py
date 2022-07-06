@@ -24,6 +24,7 @@ class WebScanner:
     """
 
     visited_links = []
+    broken_links = []
     logger = None
     exit_code = 0
 
@@ -103,6 +104,7 @@ class WebScanner:
 
         if not res.ok:
             self.exit_code += 1
+            self.broken_links.append((current_link, res.status_code))
             self.logger.error(f"{current_link} returned a {res.status_code}")
             return
 
@@ -178,7 +180,8 @@ class WebScanner:
     "-v",
     default=0,
     type=int,
-    help="Either 0,1 or 2. Controls how much output is generated.",
+    help="Either 0,1 or 2. Controls how much output is generated. 0 is the default value and only reports the broken "
+    "links.",
 )
 @click.option(
     "--channel_id",
@@ -201,13 +204,12 @@ def cli(url, prefix, max_depth, test_external_urls, verbose, channel_id):
     # the exit_code is the number of broken links found
     print("\u001b[31m %d \u001b[0m" % crawler.exit_code)
     if channel_id:
-        sh = SlackHandler(channel_id)
         if crawler.exit_code > 0:
-            sh.send_message(
-                f"There are {crawler.exit_code} broken links on {crawler.start_url}"
-            )
+            message = f"There are {crawler.exit_code} broken links on {crawler.start_url} :broken_heart:. Those are:"
         else:
-            sh.send_message(f"All the links on {crawler.start_url} returned a 200")
+            message = f"All the links on *{crawler.start_url}* returned a 200. :partying_face:"
+        sh = SlackHandler(channel_id)
+        sh.send_message(message, crawler.broken_links)
     sys.exit(crawler.exit_code)
 
 

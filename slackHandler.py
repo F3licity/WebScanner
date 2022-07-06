@@ -14,35 +14,36 @@ class SlackHandler:
     def __init__(self, channel_id):
         self.channel_id = channel_id
 
-    def send_message(self, message):
-        """TODO"""
+    def send_message(self, message, brokenLinks=[]):
+        """Send message on Slack using blocks with rich markdown type of text.
+
+        Args:
+            message: the text to be sent to slack
+            brokenLinks: a list of broken links coming from the webscanner
+        """
         client = WebClient(token=os.environ.get("SLACK_BOT_TOKEN"))
 
-        # ID of channel you want to post message to
-        # channel_id = "C03EHJN9BM0"
-
         try:
-            # message = {
-            #     "type": "section",
-            #     "text": {
-            #         "type": "mrkdwn",
-            #         "text": "Hello this is a message from the Webscanner <example.com|Fred Enriquez>\n\n<https://example.com|View request>",
-            #     },
-            # }
-            # Call the conversations.list method using the WebClient
-            result = client.chat_postMessage(
+            blocks = [
+                {"type": "section", "text": {"type": "mrkdwn", "text": message}},
+                {"type": "divider"},
+                {
+                    "type": "section",
+                    "text": {"type": "mrkdwn", "text": f"{brokenLinks}"},
+                },
+                {"type": "divider"},
+            ]
+
+            client.chat_postMessage(
                 channel=self.channel_id,
-                text=message
-                # blocks=[message]
-                # You could also use a blocks[] array to send richer content
+                blocks=blocks,
+                text="This is the WebScanner app sending a message on Slack.",
             )
-            # Print result, which includes information about the message (like TS)
-            print(result)
 
         except SlackApiError as e:
             print(f"Error: {e}")
 
 
 if __name__ == "__main__":
-    sh = SlackHandler("C03EHJN9BM0")
+    sh = SlackHandler("")
     sh.send_message("hello there!")
