@@ -27,12 +27,17 @@ class SlackHandler:
             blocks = [
                 {"type": "section", "text": {"type": "mrkdwn", "text": message}},
                 {"type": "divider"},
-                {
-                    "type": "section",
-                    "text": {"type": "mrkdwn", "text": f"{brokenLinks}"},
-                },
-                {"type": "divider"},
             ]
+            if len(brokenLinks) > 0:
+                broken_links_list = ""
+                for brokenLink in brokenLinks:
+                    broken_links_list += f" * {brokenLink[0]} : {brokenLink[1]} \n"
+                blocks.append(
+                    {
+                        "type": "section",
+                        "text": {"type": "mrkdwn", "text": broken_links_list},
+                    }
+                )
 
             client.chat_postMessage(
                 channel=self.channel_id,
