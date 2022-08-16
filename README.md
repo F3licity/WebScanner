@@ -58,6 +58,18 @@ The *max_depth* determines how deep the crawler goes, for example if set to 1, o
 followed and the process stops. If set to 2, all links of the initial page and all following links from the pages that
 follow the initial page are crawled.
 
+### slackHandler
+
+The WebScanner can send the results of the run directly to your Slack channel.
+
+By providing the `--channel_id` or `-cid` flag, in execution, you can provide the ID of the Slack
+channel in which you would like to post the results.
+
+In order to allow the WebScanner to send messages to your Slack, you need to expose, into your environment
+variables, the `SLACK_BOT_TOKEN`. Curious where to find this token? Read further on
+[Slack's documentation](https://slack.com/help/articles/215770388-Create-and-regenerate-API-tokens).
+
+
 ## Further development
 --------------
 1. Clone this repository
