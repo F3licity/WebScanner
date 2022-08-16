@@ -10,7 +10,7 @@ from slackHandler import SlackHandler
 
 
 class WebScanner:
-    """WebCrawler class to automatically find broken links and other issues with a website.
+    """WebScanner class to automatically find broken links and other issues with a website.
 
     Args:
         url (string): The url to start crawling.

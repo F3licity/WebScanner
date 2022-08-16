@@ -11,6 +11,14 @@ logger = logging.getLogger(__name__)
 
 
 class SlackHandler:
+    """Send a message on Slack reporting the results of the WebScanner.
+
+    The SlackHandler is called by the WebScanner. You don't need to call it separately.
+
+    Given Slack's channel_id is known, the SlackHandler will post a message once the WebScanner
+    has completed crawling through the given website. The result will either be a positive message,
+    that no broken links were found, or a negative one with the number of broken links and which are those.
+    """
     def __init__(self, channel_id):
         self.channel_id = channel_id
 
