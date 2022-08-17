@@ -188,7 +188,7 @@ class WebScanner:
     "-cid",
     default=None,
     type=str,
-    help="That is the id of the Slack Channel where the message should be posted.",
+    help="That is the id of the Slack Channel, where the message should be posted.",
 )
 def cli(url, prefix, max_depth, test_external_urls, verbose, channel_id):
     crawler = WebScanner(

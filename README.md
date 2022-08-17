@@ -14,9 +14,13 @@ Check out all the options using
     python3 pageCrawler.py --help
 
 ### Run using Docker
-Use the one-liner below to immediately use the webscanner from DockerHub:
+Use the one-liner below to immediately use the WebScanner from DockerHub:
 
     docker run --rm emeraldit/webscanner:1.0.0 URL_TO_CRAWL
+
+To run the docker command and send the output to your Slack, execute the image like this:
+
+    docker run --rm -e SLACK_BOT_TOKEN='your-slack-token' emeraldit/webscanner:1.0.0 --channel_id SLACK_ID URL_TO_CRAWL
 
 You can also easily run the script using Docker.  
 Build the image: `docker build --tag  webscanner:1.0.0 .`
@@ -25,14 +29,14 @@ Run the image
 
     docker run --rm \
         --name webscanner.container \
-        webscanner:1.0.0 \
+        emeraldit/webscanner:1.0.0 \
         --help
 
 or on powershell:
 
     docker run --rm `
         --name webscanner.container `
-        webscanner:1.0.0 `
+        emeraldit/webscanner:1.0.0 `
         --help
 
 ### Use in your own project
