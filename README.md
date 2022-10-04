@@ -14,26 +14,42 @@ Check out all the options using
     python3 pageCrawler.py --help
 
 ### Run using Docker
-Use the one-liner below to immediately use the webscanner from DockerHub:
+Use the one-liner below to immediately use the WebScanner from DockerHub:
 
-    docker run --rm emeraldit/webscanner:1.0.0 URL_TO_CRAWL
+```zsh
+docker run --rm emeraldit/webscanner:1.0.0 URL_TO_CRAWL
+```
+
+To run the docker command and send the output to your Slack, execute the image like this:
+
+```zsh
+docker run --rm -e SLACK_BOT_TOKEN='your-slack-token' emeraldit/webscanner:1.0.0 --channel_id SLACK_ID URL_TO_CRAWL
+```
 
 You can also easily run the script using Docker.  
-Build the image: `docker build --tag  webscanner:1.0.0 .`
+Build the image: 
+
+```zsh
+docker build --tag  emeraldit/webscanner:1.0.0 .
+```
 
 Run the image
 
-    docker run --rm \
-        --name webscanner.container \
-        webscanner:1.0.0 \
-        --help
+```zsh
+docker run --rm \
+  --name webscanner.container \
+  emeraldit/webscanner:1.0.0 \
+  --help
+```
 
 or on powershell:
 
-    docker run --rm `
-        --name webscanner.container `
-        webscanner:1.0.0 `
-        --help
+```powershell
+docker run --rm `
+  --name webscanner.container `
+  emeraldit/webscanner:1.0.0 `
+  --help
+```
 
 ### Use in your own project
 You can also use the class directly in your own python code:
@@ -73,9 +89,9 @@ variables, the `SLACK_BOT_TOKEN`. Curious where to find this token? Read further
 ## Further development
 --------------
 1. Clone this repository
-    ```bash
-    git@github.com:F3licity/WebScanner.git
-    ```
+   ```bash
+   git@github.com:F3licity/WebScanner.git
+   ```
 2. Start a new virtual environment on the root folder of this project, using Python 3.8, and activate it.
    ```bash
    pip3.8 install virtualenv
@@ -95,11 +111,14 @@ To contribute please also update the documentation.
 You can download the required packages from docs-requirements.txt (`pip install -r docs-requirements.txt`).
 
 Install the documentation requirements:
-   ```pip install -r docs-requirements.txt```
+
+    pip install -r docs-requirements.txt
 
 Build the documentation:
 
-    gendocs --config mkgendocs.yml
+```zsh
+gendocs --config mkgendocs.yml
+```
 
 You can then do `mkdocs serve` and access it on http://127.0.0.1:8000/
 
