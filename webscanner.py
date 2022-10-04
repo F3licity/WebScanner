@@ -219,7 +219,9 @@ def cli(
     # the exit_code is the number of broken links found
     print("\u001b[31m %d \u001b[0m" % crawler.exit_code)
     if channel_id:
-        message = f"All the links on *{crawler.start_url}* returned a 200. :partying_face:"
+        message = (
+            f"All the links on *{crawler.start_url}* returned a 200. :partying_face:"
+        )
         if crawler.exit_code > 0:
             message = f"There are {crawler.exit_code} broken links on {crawler.start_url} :broken_heart:. Those are:"
         if not mute_slack_on_success or crawler.exit_code > 0:
