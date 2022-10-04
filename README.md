@@ -17,20 +17,20 @@ Check out all the options using
 Use the one-liner below to immediately use the WebScanner from DockerHub:
 
 ```zsh
-docker run --rm emeraldit/webscanner:1.0.0 URL_TO_CRAWL
+docker run --rm emeraldit/webscanner:1.0.1 URL_TO_CRAWL
 ```
 
 To run the docker command and send the output to your Slack, execute the image like this:
 
 ```zsh
-docker run --rm -e SLACK_BOT_TOKEN='your-slack-token' emeraldit/webscanner:1.0.0 --channel_id SLACK_ID URL_TO_CRAWL
+docker run --rm -e SLACK_BOT_TOKEN='your-slack-token' emeraldit/webscanner:1.0.1 --channel_id SLACK_ID URL_TO_CRAWL
 ```
 
 You can also easily run the script using Docker.  
 Build the image: 
 
 ```zsh
-docker build --tag  emeraldit/webscanner:1.0.0 .
+docker build --tag emeraldit/webscanner:1.0.1 .
 ```
 
 Run the image
@@ -38,7 +38,7 @@ Run the image
 ```zsh
 docker run --rm \
   --name webscanner.container \
-  emeraldit/webscanner:1.0.0 \
+  emeraldit/webscanner:1.0.1 \
   --help
 ```
 
@@ -47,7 +47,7 @@ or on powershell:
 ```powershell
 docker run --rm `
   --name webscanner.container `
-  emeraldit/webscanner:1.0.0 `
+  emeraldit/webscanner:1.0.1 `
   --help
 ```
 
