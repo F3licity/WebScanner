@@ -180,7 +180,7 @@ class WebScanner:
     "-v",
     default=0,
     type=int,
-    help="Either 0,1 or 2. Controls how much output is generated. 0 is the default value and only reports the broken "
+    help="Either 0,1 or 2. Controls how much output is generated. 0 is the default value and only reports the broken."
     "links.",
 )
 @click.option(
@@ -190,7 +190,22 @@ class WebScanner:
     type=str,
     help="That is the id of the Slack Channel, where the message should be posted.",
 )
-def cli(url, prefix, max_depth, test_external_urls, verbose, channel_id):
+@click.option(
+    "--mute_slack_on_success",
+    "-mute",
+    default=False,
+    type=bool,
+    help="When True do NOT post on Slack when all links returned a 200.",
+)
+def cli(
+    url,
+    prefix,
+    max_depth,
+    test_external_urls,
+    verbose,
+    channel_id,
+    mute_slack_on_success,
+):
     crawler = WebScanner(
         url,
         prefix=prefix,
@@ -204,12 +219,12 @@ def cli(url, prefix, max_depth, test_external_urls, verbose, channel_id):
     # the exit_code is the number of broken links found
     print("\u001b[31m %d \u001b[0m" % crawler.exit_code)
     if channel_id:
+        message = f"All the links on *{crawler.start_url}* returned a 200. :partying_face:"
         if crawler.exit_code > 0:
             message = f"There are {crawler.exit_code} broken links on {crawler.start_url} :broken_heart:. Those are:"
-        else:
-            message = f"All the links on *{crawler.start_url}* returned a 200. :partying_face:"
-        sh = SlackHandler(channel_id)
-        sh.send_message(message, crawler.broken_links)
+        if not mute_slack_on_success or crawler.exit_code > 0:
+            sh = SlackHandler(channel_id)
+            sh.send_message(message, crawler.broken_links)
     sys.exit(crawler.exit_code)
 
 
