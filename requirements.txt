@@ -8,7 +8,7 @@ attrs==21.4.0
     # via pytest
 black==22.6.0
     # via -r requirements.in
-certifi==2021.10.8
+certifi==2023.7.22
     # via
     #   -r requirements.in
     #   requests
@@ -51,11 +51,7 @@ slack==0.0.2
 slack-sdk==3.17.2
     # via -r requirements.in
 tomli==2.0.1
-    # via
-    #   black
-    #   pytest
-typing-extensions==4.3.0
-    # via black
+    # via pytest
 urllib3==1.26.7
     # via
     #   -r requirements.in
